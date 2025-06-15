@@ -30,10 +30,7 @@ export default function AppWithProviders({ loaderData }: Route.ComponentProps) {
 	const data = loaderData;
 	return (
 		<TRPCReactProvider>
-			<ThemeProvider
-				specifiedTheme={data.theme}
-				themeAction="/action/set-theme"
-			>
+			<ThemeProvider specifiedTheme={data.theme} themeAction="/api/set-theme">
 				<App />
 			</ThemeProvider>
 		</TRPCReactProvider>

@@ -1,4 +1,4 @@
-# Welcome to YAT!
+# Welcome to verifind!
 Yet Another Template
 
 A modern, production-ready template for building full-stack React applications using React Router

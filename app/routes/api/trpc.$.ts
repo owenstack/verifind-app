@@ -1,7 +1,7 @@
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { appRouter } from "~/trpc/router";
 import { createContext } from "~/trpc/utils";
-import type { Route } from "./+types/api.trpc.$";
+import type { Route } from "./+types/trpc.$";
 
 export async function loader(args: Route.LoaderArgs) {
 	return handler(args);

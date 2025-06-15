@@ -11,3 +11,5 @@
 .wrangler
 .dev.vars*
 
+# React Email
+/workers/mailer/node_modules
