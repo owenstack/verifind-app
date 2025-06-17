@@ -10,6 +10,7 @@
 .mf
 .wrangler
 .dev.vars*
+secrets.json
 
 # React Email
 /workers/mailer/node_modules

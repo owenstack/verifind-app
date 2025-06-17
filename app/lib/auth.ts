@@ -1,7 +1,7 @@
 import { env } from "cloudflare:workers";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin, emailOTP } from "better-auth/plugins";
+import { admin } from "better-auth/plugins";
 import { db } from "~/db";
 import { client } from "~/trpc/client";
 
@@ -12,9 +12,13 @@ export const auth = betterAuth({
 	}),
 	emailAndPassword: {
 		enabled: true,
-		// async sendResetPassword({ user, token }) {
-		// 	await client.resetPasswordMail.mutate({ email: user.email, token });
-		// },
+		async sendResetPassword({ user, token }) {
+			await client.mailer.resetPasswordMail.mutate({
+				email: user.email,
+				link: token,
+				name: user.name,
+			});
+		},
 	},
 	socialProviders: {
 		google: {
@@ -35,17 +39,5 @@ export const auth = betterAuth({
 			},
 		},
 	},
-	plugins: [
-		admin(),
-		// emailOTP({
-		// 	async sendVerificationOTP({ email, otp, type }) {
-		// 		if (type === "email-verification") {
-		// 			await client.verificationMail.mutate({ email, token: otp });
-		// 		}
-		// 		if (type === "forget-password") {
-		// 			await client.resetPasswordMail.mutate({ email, token: otp });
-		// 		}
-		// 	},
-		// }),
-	],
+	plugins: [admin()],
 });
