@@ -2,6 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 import { z } from "zod";
 import { publicProcedure } from "../utils";
 import { passwordResetString } from "workers/mailer/emails/password-reset";
+import { verifyEmailString } from "workers/mailer/emails/verify-email";
 import { Resend } from "resend";
 import { env } from "cloudflare:workers";
 
@@ -25,7 +26,31 @@ export const mailerRouter = {
 				await resend.emails.send({
 					from: "Owen <owen@habilens.com>",
 					to: input.email,
-					subject: "Password Reset",
+					subject: "Password Reset - VeriFind",
+					html: body,
+				});
+			} catch (error) {
+				console.error(error instanceof Error ? error.message : "Unknown error");
+			}
+		}),
+	verifyEmail: publicProcedure
+		.input(
+			z.object({
+				token: z.string(),
+				url: z.string().url(),
+				email: z.string().email(),
+			}),
+		)
+		.mutation(async ({ input }) => {
+			try {
+				const body = await verifyEmailString({
+					token: input.token,
+					url: input.url,
+				});
+				await resend.emails.send({
+					from: "Owen <owen@habilens.com>",
+					to: input.email,
+					subject: "Verification Code - VeriFind",
 					html: body,
 				});
 			} catch (error) {

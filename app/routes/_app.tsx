@@ -1,17 +1,9 @@
-import { redirect } from "react-router";
-import { auth } from "~/lib/auth";
-import type { Route } from "./+types/_app";
+import { Outlet } from "react-router";
 
-export async function loader({ request }: Route.LoaderArgs) {
-	try {
-		const authz = await auth.api.getSession({ headers: request.headers });
-		if (!authz?.user) {
-			throw redirect("/login");
-		}
-		if (!authz.user.onboarded) {
-			throw redirect("/welcome");
-		}
-	} catch (error) {
-		throw redirect("/login");
-	}
+export default function AppLayout() {
+	return (
+		<div className="flex flex-col items-center justify-center h-screen">
+			<Outlet />
+		</div>
+	);
 }

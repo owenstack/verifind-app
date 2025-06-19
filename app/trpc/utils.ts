@@ -7,7 +7,7 @@ import { auth } from "~/lib/auth";
 
 export async function createContext({ headers }: { headers: Headers }) {
 	const authz = await auth.api.getSession({ headers: headers });
-	const source = headers.get("x-trpc-source") ?? "unknown";
+	const source = authz?.session.userAgent ?? "unknown";
 	console.log(">>> tRPC Request from", source, "by", authz?.user.email);
 	return { user: authz?.user, db };
 }

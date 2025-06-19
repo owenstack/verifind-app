@@ -20,6 +20,15 @@ export const auth = betterAuth({
 			});
 		},
 	},
+	emailVerification: {
+		async sendVerificationEmail({ user, url, token }) {
+			await client.mailer.verifyEmail.mutate({
+				email: user.email,
+				url,
+				token,
+			});
+		},
+	},
 	socialProviders: {
 		google: {
 			clientId: env.GOOGLE_CLIENT_ID,
