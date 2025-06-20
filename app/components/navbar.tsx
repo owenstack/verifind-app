@@ -1,19 +1,19 @@
+import { Link, useMatch, useNavigate } from "react-router";
+import { toast } from "sonner";
+import { signOut, useSession } from "~/lib/auth.client";
 import { getRoutes } from "~/lib/constants";
-import { useSession, signOut } from "~/lib/auth.client";
+import { cn } from "~/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
 	DropdownMenu,
-	DropdownMenuItem,
 	DropdownMenuContent,
 	DropdownMenuGroup,
-	DropdownMenuTrigger,
+	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuSeparator,
+	DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Skeleton } from "./ui/skeleton";
-import { Link, useNavigate, useMatch } from "react-router";
-import { toast } from "sonner";
-import { cn } from "~/lib/utils";
 
 export function NavBar() {
 	if (typeof window === "undefined") {

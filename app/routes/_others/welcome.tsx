@@ -1,10 +1,10 @@
-import { Key, Home, Wrench } from "lucide-react";
-import type { Route } from "./+types/welcome";
-import { auth } from "~/lib/auth";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { updateUser } from "~/lib/auth.client";
-import { toast } from "sonner";
+import { Home, Key, Wrench } from "lucide-react";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { auth } from "~/lib/auth";
+import { updateUser } from "~/lib/auth.client";
+import type { Route } from "./+types/welcome";
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	const authz = await auth.api.getSession({ headers: request.headers });

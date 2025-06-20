@@ -1,18 +1,18 @@
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router";
+import { toast } from "sonner";
+import { Button } from "~/components/ui/button";
 import {
 	Card,
-	CardHeader,
-	CardTitle,
 	CardContent,
 	CardDescription,
 	CardFooter,
+	CardHeader,
+	CardTitle,
 } from "~/components/ui/card";
-import { forgetPassword } from "~/lib/auth.client";
-import { useState } from "react";
-import { toast } from "sonner";
 import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Link } from "react-router";
+import { forgetPassword } from "~/lib/auth.client";
 
 export default function Page() {
 	const [loading, setLoading] = useState(false);

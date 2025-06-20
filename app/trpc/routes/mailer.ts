@@ -1,10 +1,10 @@
+import { env } from "cloudflare:workers";
 import type { TRPCRouterRecord } from "@trpc/server";
-import { z } from "zod";
-import { publicProcedure } from "../utils";
+import { Resend } from "resend";
 import { passwordResetString } from "workers/mailer/emails/password-reset";
 import { verifyEmailString } from "workers/mailer/emails/verify-email";
-import { Resend } from "resend";
-import { env } from "cloudflare:workers";
+import { z } from "zod";
+import { publicProcedure } from "../utils";
 
 const resend = new Resend(env.RESEND_API_KEY);
 

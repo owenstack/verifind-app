@@ -1,10 +1,10 @@
-import { auth } from "~/lib/auth";
-import type { Route } from "./+types/verify-email";
+import { CheckCircle, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
-import { verifyEmail, sendVerificationEmail } from "~/lib/auth.client";
-import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { Loader2, CheckCircle } from "lucide-react";
+import { auth } from "~/lib/auth";
+import { sendVerificationEmail, verifyEmail } from "~/lib/auth.client";
+import type { Route } from "./+types/verify-email";
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	try {

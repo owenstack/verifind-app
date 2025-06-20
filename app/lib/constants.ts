@@ -1,11 +1,11 @@
 import {
-	type LucideIcon,
-	ScanSearch,
-	FolderHeart,
-	MessageSquareMore,
-	LayoutPanelTop,
-	Building2,
 	BriefcaseBusiness,
+	Building2,
+	FolderHeart,
+	LayoutPanelTop,
+	type LucideIcon,
+	MessageSquareMore,
+	ScanSearch,
 } from "lucide-react";
 
 export const getRoutes = (
