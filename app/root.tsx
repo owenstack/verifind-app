@@ -49,7 +49,7 @@ export function App() {
 				<PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
 				<Links />
 			</head>
-			<body>
+			<body className="bg-background text-foreground antialiased">
 				<Outlet />
 				<Toaster richColors />
 				<ScrollRestoration />

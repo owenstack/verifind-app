@@ -1,6 +1,6 @@
 import { redirect } from "react-router";
 import { auth } from "~/lib/auth";
-import type { Route } from "./+types/_app._index";
+import type { Route } from "./+types";
 
 export async function loader({ request }: Route.LoaderArgs) {
 	const authz = await auth.api.getSession({ headers: request.headers });

@@ -21,7 +21,7 @@ export default function Page() {
 		const email = form.get("email") as string;
 		try {
 			await forgetPassword(
-				{ email },
+				{ email, redirectTo: "/reset-password" },
 				{
 					onError: (ctx) => {
 						toast.error("Something went wrong", {
@@ -42,42 +42,40 @@ export default function Page() {
 		}
 	};
 	return (
-		<div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-			<div className="w-full max-w-sm">
-				<Card>
-					<CardHeader>
-						<CardTitle>Forgot Password</CardTitle>
-						<CardDescription>
-							Enter your email to reset your password
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<div className="flex flex-col gap-6">
-							<form action={forgetHandler} className="grid gap-6">
-								<Input
-									name="email"
-									type="email"
-									placeholder="you@example.com"
-									required
-								/>
-								<Button type="submit" disabled={loading}>
-									{loading ? (
-										<Loader2 className="size-4 animate-spin" />
-									) : (
-										"Send Reset Link"
-									)}
-								</Button>
-							</form>
-							<div className="mt-4 text-center text-sm">
-								Already have an account?{" "}
-								<Link to="/login" className="underline underline-offset-4">
-									Log in
-								</Link>
-							</div>
+		<div className="w-full max-w-sm">
+			<Card>
+				<CardHeader>
+					<CardTitle>Forgot Password</CardTitle>
+					<CardDescription>
+						Enter your email to reset your password
+					</CardDescription>
+				</CardHeader>
+				<CardContent>
+					<div className="flex flex-col gap-6">
+						<form action={forgetHandler} className="grid gap-6">
+							<Input
+								name="email"
+								type="email"
+								placeholder="you@example.com"
+								required
+							/>
+							<Button type="submit" disabled={loading}>
+								{loading ? (
+									<Loader2 className="size-4 animate-spin" />
+								) : (
+									"Send Reset Link"
+								)}
+							</Button>
+						</form>
+						<div className="mt-4 text-center text-sm">
+							Already have an account?{" "}
+							<Link to="/login" className="underline underline-offset-4">
+								Log in
+							</Link>
 						</div>
-					</CardContent>
-				</Card>
-			</div>
+					</div>
+				</CardContent>
+			</Card>
 		</div>
 	);
 }

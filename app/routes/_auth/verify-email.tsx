@@ -1,6 +1,6 @@
 import { auth } from "~/lib/auth";
 import type { Route } from "./+types/verify-email";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import { verifyEmail, sendVerificationEmail } from "~/lib/auth.client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -19,9 +19,10 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 	}
 };
 
-export default function Page({ loaderData, params }: Route.ComponentProps) {
+export default function Page({ loaderData }: Route.ComponentProps) {
 	const { error, email } = loaderData;
-	const { token } = params;
+	const [searchParams] = useSearchParams();
+	const token = searchParams.get("token");
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState(false);
 	const [verified, setVerified] = useState(false);
@@ -92,26 +93,24 @@ export default function Page({ loaderData, params }: Route.ComponentProps) {
 	}, [token, email, error, navigate]);
 
 	return (
-		<div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-			<div className="w-full max-w-sm space-y-4 text-center">
-				<h1 className="text-2xl font-bold">Email Verification</h1>
-				{loading ? (
-					<div className="flex justify-center">
-						<Loader2 className="h-8 w-8 animate-spin" />
-					</div>
-				) : verified ? (
-					<div className="flex flex-col items-center gap-2">
-						<CheckCircle className="h-8 w-8 text-green-500" />
-						<p>Email verified successfully! Redirecting...</p>
-					</div>
-				) : (
-					<p>
-						{token
-							? "Verifying your email..."
-							: "Please check your email for the verification link"}
-					</p>
-				)}
-			</div>
+		<div className="w-full max-w-sm space-y-4 text-center">
+			<h1 className="text-2xl font-bold">Email Verification</h1>
+			{loading ? (
+				<div className="flex justify-center">
+					<Loader2 className="h-8 w-8 animate-spin" />
+				</div>
+			) : verified ? (
+				<div className="flex flex-col items-center gap-2">
+					<CheckCircle className="h-8 w-8 text-green-500" />
+					<p>Email verified successfully! Redirecting...</p>
+				</div>
+			) : (
+				<p>
+					{token
+						? "Verifying your email..."
+						: "Please check your email for the verification link"}
+				</p>
+			)}
 		</div>
 	);
 }
