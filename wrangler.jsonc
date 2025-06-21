@@ -17,6 +17,12 @@
 			"database_name": "verifind",
 			"database_id": "121f9814-cf3a-46e2-bb6d-07dc28151bea"
 		}
+	],
+	"r2_buckets": [
+		{
+			"bucket_name": "verifind",
+			"binding": "verifind"
+		}
 	]
 	/**
 	 * Smart Placement
