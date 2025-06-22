@@ -1,17 +1,17 @@
-import { Dialog, DialogContent, DialogTitle } from "./ui/dialog";
-import { useState, useEffect } from "react";
-import { updateUser } from "~/lib/auth.client";
+import { ArrowLeft, ArrowRight, Check, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import {
-	Carousel,
-	CarouselContent,
-	CarouselItem,
-	type CarouselApi,
-} from "./ui/carousel";
+import { updateUser } from "~/lib/auth.client";
 import type { OnboardingContent } from "~/lib/constants";
 import { cn } from "~/lib/utils";
 import { Button } from "./ui/button";
-import { ArrowLeft, ArrowRight, Check, Loader2 } from "lucide-react";
+import {
+	Carousel,
+	type CarouselApi,
+	CarouselContent,
+	CarouselItem,
+} from "./ui/carousel";
+import { Dialog, DialogContent, DialogTitle } from "./ui/dialog";
 
 export function OnboardingDialog({
 	open,

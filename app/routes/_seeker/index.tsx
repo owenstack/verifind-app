@@ -1,9 +1,7 @@
-import type { Route } from "./+types";
-import { auth } from "~/lib/auth";
-import { useState } from "react";
-import { updateUser } from "~/lib/auth.client";
 import { OnboardingDialog } from "~/components/onboarding";
+import { auth } from "~/lib/auth";
 import { seekerOnboardingSlides } from "~/lib/constants";
+import type { Route } from "./+types";
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
 	const authz = await auth.api.getSession({ headers: request.headers });
