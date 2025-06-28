@@ -1,6 +1,5 @@
-import { env } from "cloudflare:workers";
 import type { TRPCRouterRecord } from "@trpc/server";
-import { z } from "zod";
+import { eq } from "drizzle-orm";
 import { property } from "~/db/property.schema";
 import { insertPropertySchema } from "~/db/property.zod";
 import { protectedProcedure } from "../utils";
@@ -31,4 +30,25 @@ export const propertyRouter = {
 				};
 			}
 		}),
+	getProperties: protectedProcedure.query(async ({ ctx }) => {
+		try {
+			const { db, user } = ctx;
+			if (user.mode !== "owner") {
+				return { error: "You are not authorized to view properties." };
+			}
+			const properties = await db
+				.select()
+				.from(property)
+				.where(eq(property.ownerId, user.id));
+			return { success: true, data: properties };
+		} catch (error) {
+			console.error("Error fetching properties:", error);
+			return {
+				error:
+					error instanceof Error
+						? error.message
+						: "An unexpected error occurred.",
+			};
+		}
+	}),
 } satisfies TRPCRouterRecord;

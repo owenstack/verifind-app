@@ -34,7 +34,9 @@ export const usePropertyDraftStore = create<PropertyDraftStore>()(
 						const draftEntries = Object.entries(state.drafts);
 						if (draftEntries.length > MAX_DRAFTS) {
 							const oldest = draftEntries.sort(
-								([, a], [, b]) => a.lastSaved - b.lastSaved,
+								([, a], [, b]) =>
+									(a as PropertyDraftData).lastSaved -
+									(b as PropertyDraftData).lastSaved,
 							)[0][0];
 							delete state.drafts[oldest];
 						}

@@ -20,6 +20,8 @@ export default [
 	...prefix("owner", [
 		layout("routes/_owner/layout.tsx", [
 			index("routes/_owner/index.tsx"),
+			route("listings/new", "routes/_owner/new.tsx"),
+			route("listings", "routes/_owner/listings.tsx"),
 			// route("dashboard", "routes/_owner/dashboard.tsx"),
 			// route("settings", "routes/_owner/settings.tsx"),
 		]),

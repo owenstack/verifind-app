@@ -1,4 +1,3 @@
-import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const user = sqliteTable("user", {
@@ -23,26 +22,21 @@ export const session = sqliteTable("session", {
 	id: text("id").primaryKey(),
 	userId: text("userId")
 		.notNull()
-		.references(() => user.id, { onDelete: "cascade" }),
+		.references(() => user.id),
 	token: text("token").notNull(),
 	expiresAt: integer("expiresAt", { mode: "timestamp" }).notNull(),
 	ipAddress: text("ipAddress"),
 	userAgent: text("userAgent"),
 	impersonatedBy: text("impersonatedBy"),
-	createdAt: integer("createdAt", { mode: "timestamp" })
-		.notNull()
-		.default(sql`(unixepoch())`),
-	updatedAt: integer("updatedAt", { mode: "timestamp" })
-		.notNull()
-		.default(sql`(unixepoch())`)
-		.$onUpdate(() => sql`(unixepoch())`),
+	createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+	updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
 });
 
 export const account = sqliteTable("account", {
 	id: text("id").primaryKey(),
 	userId: text("userId")
 		.notNull()
-		.references(() => user.id, { onDelete: "cascade" }),
+		.references(() => user.id),
 	accountId: text("accountId").notNull(),
 	providerId: text("providerId").notNull(),
 	accessToken: text("accessToken"),
@@ -54,13 +48,8 @@ export const account = sqliteTable("account", {
 	scope: text("scope"),
 	idToken: text("idToken"),
 	password: text("password"),
-	createdAt: integer("createdAt", { mode: "timestamp" })
-		.notNull()
-		.default(sql`(unixepoch())`),
-	updatedAt: integer("updatedAt", { mode: "timestamp" })
-		.notNull()
-		.default(sql`(unixepoch())`)
-		.$onUpdate(() => sql`(unixepoch())`),
+	createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+	updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
 });
 
 export const verification = sqliteTable("verification", {
@@ -68,13 +57,8 @@ export const verification = sqliteTable("verification", {
 	identifier: text("identifier").notNull(),
 	value: text("value").notNull(),
 	expiresAt: integer("expiresAt", { mode: "timestamp" }).notNull(),
-	createdAt: integer("createdAt", { mode: "timestamp" })
-		.notNull()
-		.default(sql`(unixepoch())`),
-	updatedAt: integer("updatedAt", { mode: "timestamp" })
-		.notNull()
-		.default(sql`(unixepoch())`)
-		.$onUpdate(() => sql`(unixepoch())`),
+	createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+	updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
 });
 
 export type User = typeof user.$inferSelect;
