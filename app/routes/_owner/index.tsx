@@ -1,4 +1,6 @@
+import { Link } from "react-router";
 import { OnboardingDialog } from "~/components/onboarding";
+import { buttonVariants } from "~/components/ui/button";
 import { auth } from "~/lib/auth";
 import { ownerOnboardingSlides } from "~/lib/constants";
 import type { Route } from "./+types";
@@ -13,20 +15,12 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
 export default function Page({ loaderData }: Route.ComponentProps) {
 	const { isOnboarded, name } = loaderData;
-	const hours = new Date().getHours();
-	const greeting =
-		hours < 12
-			? "Good morning"
-			: hours < 18
-				? "Good afternoon"
-				: "Good evening";
 	return (
 		<>
-			<div>
-				<p>
-					{greeting}, {name.split(" ")[0]}!
-				</p>
-				Owner dashboard
+			<div className="flex flex-col">
+				<h3 className="px-4 pb-2 pt-4 text-lg font-bold leading-tight tracking-[-0.015em]">
+					Welcome back, {name.split(" ")[0]}
+				</h3>
 			</div>
 			<OnboardingDialog open={!isOnboarded} slides={ownerOnboardingSlides} />
 		</>

@@ -34,7 +34,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	const [sortBy, setSortBy] = useState("recent");
 	const trpc = useTRPC();
 	const { data, isLoading, error } = useQuery(
-		trpc.property.getProperties.queryOptions(),
+		trpc.property.getOwnerProperties.queryOptions(),
 	);
 	if (error || data?.error) {
 		toast.error("Something went wrong", {
@@ -148,7 +148,6 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 											}
 											type={item.type}
 											data={item.data}
-											showBorder={index < items.length - 1}
 										/>
 									))
 								)}

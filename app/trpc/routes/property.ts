@@ -1,5 +1,6 @@
 import type { TRPCRouterRecord } from "@trpc/server";
 import { eq } from "drizzle-orm";
+import { z } from "zod";
 import { property } from "~/db/property.schema";
 import { insertPropertySchema } from "~/db/property.zod";
 import { protectedProcedure } from "../utils";
@@ -30,7 +31,7 @@ export const propertyRouter = {
 				};
 			}
 		}),
-	getProperties: protectedProcedure.query(async ({ ctx }) => {
+	getOwnerProperties: protectedProcedure.query(async ({ ctx }) => {
 		try {
 			const { db, user } = ctx;
 			if (user.mode !== "owner") {
@@ -51,4 +52,85 @@ export const propertyRouter = {
 			};
 		}
 	}),
+	getPropertyById: protectedProcedure
+		.input(z.object({ id: z.string() }))
+		.query(async ({ ctx, input }) => {
+			try {
+				const { db, user } = ctx;
+				if (user.mode !== "owner") {
+					return { error: "You are not authorized to view properties." };
+				}
+				const properties = await db
+					.select()
+					.from(property)
+					.where(eq(property.id, input.id))
+					.limit(1)
+					.execute();
+				if (!property) {
+					return { error: "Property not found." };
+				}
+				return { success: true, data: properties[0] };
+			} catch (error) {
+				console.error("Error fetching property:", error);
+				return {
+					error:
+						error instanceof Error
+							? error.message
+							: "An unexpected error occurred.",
+				};
+			}
+		}),
+	deactivateProperty: protectedProcedure
+		.input(z.object({ id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			try {
+				const { db, user } = ctx;
+				if (user.mode !== "owner") {
+					return { error: "You are not authorized to deactivate properties." };
+				}
+				const result = await db
+					.update(property)
+					.set({ status: "inactive" })
+					.where(eq(property.id, input.id))
+					.execute();
+				if (result.error) {
+					return { error: "Property not found or already deactivated." };
+				}
+				return { success: true, message: "Property deactivated successfully." };
+			} catch (error) {
+				console.error("Error deactivating property:", error);
+				return {
+					error:
+						error instanceof Error
+							? error.message
+							: "An unexpected error occurred.",
+				};
+			}
+		}),
+	deleteProperty: protectedProcedure
+		.input(z.object({ id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			try {
+				const { db, user } = ctx;
+				if (user.mode !== "owner") {
+					return { error: "You are not authorized to delete properties." };
+				}
+				const result = await db
+					.delete(property)
+					.where(eq(property.id, input.id))
+					.execute();
+				if (result.error) {
+					return { error: "Property not found or already deleted." };
+				}
+				return { success: true, message: "Property deleted successfully." };
+			} catch (error) {
+				console.error("Error deleting property:", error);
+				return {
+					error:
+						error instanceof Error
+							? error.message
+							: "An unexpected error occurred.",
+				};
+			}
+		}),
 } satisfies TRPCRouterRecord;

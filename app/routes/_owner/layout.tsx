@@ -2,6 +2,7 @@ import { Plus } from "lucide-react";
 import { Link, Outlet } from "react-router";
 import { Menu } from "~/components/menu";
 import { NavBar } from "~/components/navbar";
+import { SideMenu } from "~/components/side-menu";
 import { buttonVariants } from "~/components/ui/button";
 
 export default function OwnerLayout() {
@@ -16,6 +17,7 @@ export default function OwnerLayout() {
 						<Plus className="size-6" />
 					</Link>
 				}
+				leftElement={<SideMenu />}
 			/>
 			<div className="flex-1 overflow-auto p-6 md:p-10 pb-24">
 				<Outlet />

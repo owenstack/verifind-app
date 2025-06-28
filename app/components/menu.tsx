@@ -11,8 +11,16 @@ export function Menu({
 	className?: string;
 }) {
 	const location = useLocation();
-	const pathName = location.pathname.split("/").pop() || "";
-	const formattedTitle = pathName.replace(/-/g, " ");
+	const pathSegments = location.pathname.split("/").filter(Boolean);
+	const lastSegment = pathSegments[pathSegments.length - 1] || "";
+	const secondLastSegment = pathSegments[pathSegments.length - 2] || "";
+
+	let title = lastSegment;
+	if (lastSegment.length >= 20) {
+		title = secondLastSegment;
+	}
+
+	const formattedTitle = title.replace(/-/g, " ");
 	const capitalizedTitle =
 		formattedTitle.charAt(0).toUpperCase() + formattedTitle.slice(1);
 

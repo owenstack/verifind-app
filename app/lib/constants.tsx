@@ -9,6 +9,7 @@ import {
 	LayoutPanelTop,
 	type LucideIcon,
 	MessageSquareMore,
+	Plus,
 	ScanSearch,
 	Search,
 	Shield,
@@ -44,6 +45,21 @@ export const getRoutes = (
 		{ title: "Listings", path: "/provider/jobs", icon: BriefcaseBusiness },
 		{ title: "Messages", path: "/provider/messages", icon: MessageSquareMore },
 	];
+};
+
+export const getMenuLinks = (
+	role: "seeker" | "provider" | "owner" | string,
+): { title: string; path: string; icon: LucideIcon }[] => {
+	if (role === "owner") {
+		return [
+			{ title: "New listing", path: "/owner/listings/new", icon: Plus },
+			{ title: "Drafts", path: "/owner/drafts", icon: FolderHeart },
+			{ title: "Maintenance", path: "/owner/maintenance", icon: Wrench },
+			{ title: "Inquiries", path: "/owner/inquiries", icon: ScanSearch },
+			{ title: "Analytics", path: "/owner/analytics", icon: DollarSign },
+		];
+	}
+	return [];
 };
 
 export interface OnboardingContent {

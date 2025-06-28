@@ -3,15 +3,14 @@ import { Link } from "react-router";
 import { Badge } from "~/components/ui/badge";
 import type { Property } from "~/db/property.schema";
 import type { PropertyDraftData } from "~/lib/draft/types";
-import { cn } from "~/lib/utils";
+import { PropertyMenu } from "./property-menu";
 
 interface PropertyCardProps {
 	type: "property" | "draft";
 	data: Property | PropertyDraftData;
-	showBorder?: boolean;
 }
 
-export function PropertyCard({ type, data, showBorder }: PropertyCardProps) {
+export function PropertyCard({ type, data }: PropertyCardProps) {
 	const isDraft = type === "draft";
 	const propertyData = isDraft
 		? (data as PropertyDraftData).data
@@ -81,73 +80,76 @@ export function PropertyCard({ type, data, showBorder }: PropertyCardProps) {
 	};
 
 	const statusInfo = getStatusInfo();
-	const linkTo = isDraft
-		? `/owner/listings/new?draftId=${(data as PropertyDraftData).id}`
-		: `/owner/properties/${(data as Property).id}`;
 
 	return (
-		<Link to={linkTo} className="block">
-			<div
-				className={cn("p-4 bg-card", showBorder && "border-b border-border")}
+		<div className="relative overflow-hidden rounded-lg bg-card shadow-md transition-all hover:shadow-lg">
+			<Link
+				to={
+					isDraft
+						? `/owner/listings/${data.id}/edit`
+						: `/owner/listings/${data.id}`
+				}
+				className="block"
 			>
-				<div className="flex items-stretch justify-between gap-4">
-					<div className="flex flex-col gap-2 flex-[2_2_0px]">
+				<div
+					className="h-40 w-full bg-cover bg-center bg-no-repeat"
+					style={{ backgroundImage: `url("${imageUrl}")` }}
+					aria-label="Property image"
+				/>
+			</Link>
+
+			<div className="p-4">
+				<div className="flex items-start justify-between">
+					<div className="flex-1 pr-4">
 						<div className="flex items-center gap-2">
-							<p className="text-muted-foreground text-sm font-normal">
-								{isDraft ? "Draft" : "Listing"}
-							</p>
 							<Badge variant={statusInfo.variant} className="text-xs">
 								{statusInfo.label}
 							</Badge>
 						</div>
 
-						<h3 className="text-foreground text-base font-bold line-clamp-2">
+						<h3 className="mt-2 line-clamp-2 text-base font-bold text-foreground">
 							{propertyData?.title || "Untitled Property"}
 						</h3>
 
-						<p className="text-muted-foreground text-sm font-normal line-clamp-1">
+						<p className="mt-1 line-clamp-1 text-sm font-normal text-muted-foreground">
 							{propertyData?.address ||
 								propertyData?.area ||
 								"Location not set"}
 						</p>
-
-						<div className="flex items-center gap-2 text-sm text-foreground">
-							<span className="font-medium">
-								{formatPrice(propertyData?.price)}
-							</span>
-							{propertyData?.rentType && (
-								<span className="text-muted-foreground">
-									/ {propertyData.rentType}
-								</span>
-							)}
-						</div>
-
-						{isDraft && (
-							<div className="flex items-center gap-1 text-xs text-muted-foreground">
-								<Clock className="h-3 w-3" />
-								<span>
-									Last saved:{" "}
-									{new Date(
-										(data as PropertyDraftData).lastSaved,
-									).toLocaleDateString()}
-								</span>
-							</div>
-						)}
 					</div>
 
-					<div
-						className="w-20 h-16 bg-center bg-no-repeat bg-cover rounded-lg flex-shrink-0 bg-muted"
-						style={{ backgroundImage: `url("${imageUrl}")` }}
-						aria-label="Property image"
-					/>
+					<div className="absolute right-2 top-2">
+						<PropertyMenu
+							id={
+								isDraft ? (data as PropertyDraftData).id : (data as Property).id
+							}
+						/>
+					</div>
 				</div>
 
-				{!isDraft && (
-					<div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
-						<p className="text-muted-foreground text-sm">
-							Listing: {statusInfo.label} · Rental: {statusInfo.description}
-						</p>
+				<div className="mt-4 flex items-center gap-2 text-sm text-foreground">
+					<span className="font-medium">
+						{formatPrice(propertyData?.price)}
+					</span>
+					{propertyData?.rentType && (
+						<span className="text-muted-foreground">
+							/ {propertyData.rentType}
+						</span>
+					)}
+				</div>
 
+				{isDraft ? (
+					<div className="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
+						<Clock className="h-3 w-3" />
+						<span>
+							Last saved:{" "}
+							{new Date(
+								(data as PropertyDraftData).lastSaved,
+							).toLocaleDateString()}
+						</span>
+					</div>
+				) : (
+					<div className="mt-3 flex items-center justify-between border-t border-border pt-3">
 						<div className="flex items-center gap-4 text-sm text-muted-foreground">
 							<div className="flex items-center gap-1">
 								<Eye className="h-4 w-4" />
@@ -161,6 +163,6 @@ export function PropertyCard({ type, data, showBorder }: PropertyCardProps) {
 					</div>
 				)}
 			</div>
-		</Link>
+		</div>
 	);
 }
