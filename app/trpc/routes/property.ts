@@ -1,8 +1,9 @@
 import type { TRPCRouterRecord } from "@trpc/server";
-import { eq } from "drizzle-orm";
+import { and, count, desc, eq, sum } from "drizzle-orm";
 import { z } from "zod";
 import { property } from "~/db/property.schema";
 import { insertPropertySchema } from "~/db/property.zod";
+import { request } from "~/db/requests.schema";
 import { protectedProcedure } from "../utils";
 
 export const propertyRouter = {
@@ -133,4 +134,84 @@ export const propertyRouter = {
 				};
 			}
 		}),
+	getOwnerOverview: protectedProcedure.query(async ({ ctx }) => {
+		try {
+			const { db, user } = ctx;
+			if (user.mode !== "owner") {
+				return { error: "You are not authorized to view overview." };
+			}
+
+			const [
+				properties,
+				totalViewsResult,
+				activeInquiries,
+				bestPerforming,
+				recentActivity,
+			] = await Promise.all([
+				db.select().from(property).where(eq(property.ownerId, user.id)),
+				db
+					.select({ value: sum(property.viewCount) })
+					.from(property)
+					.where(eq(property.ownerId, user.id))
+					.execute(),
+				db
+					.select({ value: count() })
+					.from(request)
+					.where(
+						and(eq(request.status, "pending"), eq(property.ownerId, user.id)),
+					)
+					.leftJoin(property, eq(request.propertyId, property.id))
+					.execute(),
+				db
+					.select()
+					.from(property)
+					.where(eq(property.ownerId, user.id))
+					.orderBy(desc(property.viewCount))
+					.limit(5)
+					.execute(),
+				db
+					.select()
+					.from(request)
+					.where(eq(property.ownerId, user.id))
+					.orderBy(desc(request.createdAt))
+					.limit(10)
+					.leftJoin(property, eq(request.propertyId, property.id))
+					.execute(),
+			]);
+
+			const totalListings = properties.length;
+			const activeListings = properties.filter(
+				(p) => p.status === "active",
+			).length;
+
+			const rentedListings = properties.filter(
+				(p) => p.status === "rented",
+			).length;
+
+			const occupancyRate =
+				totalListings > 0 ? (rentedListings / totalListings) * 100 : 0;
+
+			const totalViews = Number(totalViewsResult[0].value) || 0;
+
+			return {
+				success: true,
+				data: {
+					activeListings,
+					activeInquiries: activeInquiries[0].value,
+					occupancyRate,
+					totalViews,
+					bestPerforming,
+					recentActivity,
+				},
+			};
+		} catch (error) {
+			console.error("Error fetching owner overview:", error);
+			return {
+				error:
+					error instanceof Error
+						? error.message
+						: "An unexpected error occurred.",
+			};
+		}
+	}),
 } satisfies TRPCRouterRecord;

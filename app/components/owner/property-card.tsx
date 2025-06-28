@@ -1,6 +1,14 @@
 import { Clock, Eye, Heart } from "lucide-react";
 import { Link } from "react-router";
 import { Badge } from "~/components/ui/badge";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "~/components/ui/card";
 import type { Property } from "~/db/property.schema";
 import type { PropertyDraftData } from "~/lib/draft/types";
 import { PropertyMenu } from "./property-menu";
@@ -66,7 +74,7 @@ export function PropertyCard({ type, data }: PropertyCardProps) {
 				};
 			case "inactive":
 				return {
-					label: "outline",
+					label: "Inactive",
 					variant: "secondary" as const,
 					description: "Not visible",
 				};
@@ -82,7 +90,7 @@ export function PropertyCard({ type, data }: PropertyCardProps) {
 	const statusInfo = getStatusInfo();
 
 	return (
-		<div className="relative overflow-hidden rounded-lg bg-card shadow-md transition-all hover:shadow-lg">
+		<Card className="overflow-hidden transition-all hover:shadow-lg">
 			<Link
 				to={
 					isDraft
@@ -98,36 +106,27 @@ export function PropertyCard({ type, data }: PropertyCardProps) {
 				/>
 			</Link>
 
-			<div className="p-4">
-				<div className="flex items-start justify-between">
-					<div className="flex-1 pr-4">
-						<div className="flex items-center gap-2">
-							<Badge variant={statusInfo.variant} className="text-xs">
-								{statusInfo.label}
-							</Badge>
-						</div>
-
-						<h3 className="mt-2 line-clamp-2 text-base font-bold text-foreground">
-							{propertyData?.title || "Untitled Property"}
-						</h3>
-
-						<p className="mt-1 line-clamp-1 text-sm font-normal text-muted-foreground">
-							{propertyData?.address ||
-								propertyData?.area ||
-								"Location not set"}
-						</p>
-					</div>
-
-					<div className="absolute right-2 top-2">
-						<PropertyMenu
-							id={
-								isDraft ? (data as PropertyDraftData).id : (data as Property).id
-							}
-						/>
-					</div>
+			<CardHeader className="relative p-4">
+				<div className="absolute right-2 top-2">
+					<PropertyMenu
+						id={
+							isDraft ? (data as PropertyDraftData).id : (data as Property).id
+						}
+					/>
 				</div>
+				<Badge variant={statusInfo.variant} className="text-xs w-fit">
+					{statusInfo.label}
+				</Badge>
+				<CardTitle className="mt-2 line-clamp-2 text-base font-bold">
+					{propertyData?.title || "Untitled Property"}
+				</CardTitle>
+				<CardDescription className="mt-1 line-clamp-1 text-sm font-normal">
+					{propertyData?.address || propertyData?.area || "Location not set"}
+				</CardDescription>
+			</CardHeader>
 
-				<div className="mt-4 flex items-center gap-2 text-sm text-foreground">
+			<CardContent className="p-4 pt-0">
+				<div className="flex items-center gap-2 text-sm text-foreground">
 					<span className="font-medium">
 						{formatPrice(propertyData?.price)}
 					</span>
@@ -137,9 +136,11 @@ export function PropertyCard({ type, data }: PropertyCardProps) {
 						</span>
 					)}
 				</div>
+			</CardContent>
 
+			<CardFooter className="p-4 pt-0">
 				{isDraft ? (
-					<div className="mt-3 flex items-center gap-1 text-xs text-muted-foreground">
+					<div className="flex items-center gap-1 text-xs text-muted-foreground">
 						<Clock className="h-3 w-3" />
 						<span>
 							Last saved:{" "}
@@ -149,7 +150,7 @@ export function PropertyCard({ type, data }: PropertyCardProps) {
 						</span>
 					</div>
 				) : (
-					<div className="mt-3 flex items-center justify-between border-t border-border pt-3">
+					<div className="flex items-center justify-between w-full">
 						<div className="flex items-center gap-4 text-sm text-muted-foreground">
 							<div className="flex items-center gap-1">
 								<Eye className="h-4 w-4" />
@@ -162,7 +163,7 @@ export function PropertyCard({ type, data }: PropertyCardProps) {
 						</div>
 					</div>
 				)}
-			</div>
-		</div>
+			</CardFooter>
+		</Card>
 	);
 }
