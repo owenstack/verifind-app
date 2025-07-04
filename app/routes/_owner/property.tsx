@@ -21,7 +21,7 @@ export const loader = async (args: Route.LoaderArgs) => {
 
 export default function Page({ loaderData }: Route.ComponentProps) {
 	const { data, userId, propertyId } = loaderData;
-	const isOwner = data?.data?.ownerId === userId;
+	const _isOwner = data?.data?.ownerId === userId;
 	if (data?.error) {
 		toast.error("Something went wrong", {
 			description: data.error,
@@ -30,5 +30,5 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	const { loadDraft, draftData } = usePropertyDraft(userId);
 	loadDraft(propertyId);
 
-	return <>Property Details</>;
+	return "Property Details";
 }

@@ -1,8 +1,8 @@
 import { Menu } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link, useMatch } from "react-router";
 import { useSession } from "~/lib/auth.client";
 import { getMenuLinks } from "~/lib/constants";
-import { cn } from "~/lib/utils";
 import { buttonVariants } from "./ui/button";
 import {
 	Sheet,
@@ -14,7 +14,13 @@ import {
 } from "./ui/sheet";
 
 export function SideMenu() {
-	if (typeof window === "undefined") {
+	const [isClient, setIsClient] = useState(false);
+
+	useEffect(() => {
+		setIsClient(true);
+	}, []);
+
+	if (!isClient) {
 		return (
 			<Sheet>
 				<SheetTrigger className="p-2">
@@ -29,7 +35,7 @@ export function SideMenu() {
 			</Sheet>
 		);
 	}
-	const { data } = useSession();
+
 	return (
 		<Sheet>
 			<SheetTrigger className="p-2">
@@ -39,21 +45,30 @@ export function SideMenu() {
 				<SheetHeader>
 					<SheetTitle>Menu</SheetTitle>
 				</SheetHeader>
-				<nav className="flex flex-col gap-2 p-4">
-					{getMenuLinks(data?.user.mode ?? "").map((link) => (
-						<Link
-							key={link.path}
-							to={link.path}
-							className={buttonVariants({
-								variant: useMatch(link.path) ? "secondary" : "ghost",
-							})}
-						>
-							<link.icon className="size-5" />
-							<span>{link.title}</span>
-						</Link>
-					))}
-				</nav>
+				<SideMenuContent />
 			</SheetContent>
 		</Sheet>
+	);
+}
+
+function SideMenuContent() {
+	const { data } = useSession();
+	const match = useMatch("*");
+	const isActive = (path: string) => match?.pathname === path;
+	return (
+		<nav className="flex flex-col gap-2 p-4">
+			{getMenuLinks(data?.user.mode ?? "").map((link) => (
+				<Link
+					key={link.path}
+					to={link.path}
+					className={buttonVariants({
+						variant: isActive(link.path) ? "secondary" : "ghost",
+					})}
+				>
+					<link.icon className="size-5" />
+					<span>{link.title}</span>
+				</Link>
+			))}
+		</nav>
 	);
 }

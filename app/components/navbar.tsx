@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link, useMatch, useNavigate } from "react-router";
 import { toast } from "sonner";
 import { signOut, useSession } from "~/lib/auth.client";
@@ -16,7 +17,12 @@ import {
 import { Skeleton } from "./ui/skeleton";
 
 export function NavBar() {
-	if (typeof window === "undefined") {
+	const [mounted, setMounted] = useState(false);
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	if (!mounted) {
 		return (
 			<footer className="fixed left-0 right-0 bg-background flex items-center justify-between bottom-0 border-t gap-2 px-4 py-2 backdrop-blur-lg z-20">
 				<Skeleton className="size-10 rounded-md" />
@@ -27,7 +33,17 @@ export function NavBar() {
 			</footer>
 		);
 	}
-	const { data } = useSession();
+	return (
+		<footer className="fixed left-0 right-0 bg-background flex items-center justify-between bottom-0 border-t gap-2 px-4 py-2 backdrop-blur-lg z-20">
+			<FooterContent />
+		</footer>
+	);
+}
+
+function FooterContent() {
+	const { data, isPending } = useSession();
+	const match = useMatch("*");
+	const isActive = (path: string) => match?.pathname === path;
 	const navigate = useNavigate();
 	const signOutHandler = async () => {
 		try {
@@ -41,8 +57,16 @@ export function NavBar() {
 			});
 		}
 	};
-	return (
-		<footer className="fixed left-0 right-0 bg-background flex items-center justify-between bottom-0 border-t gap-2 px-4 py-2 backdrop-blur-lg z-20">
+	return isPending ? (
+		<>
+			<Skeleton className="size-10 rounded-md" />
+			<Skeleton className="size-10 rounded-md" />
+			<Skeleton className="size-10 rounded-md" />
+			<Skeleton className="size-10 rounded-md" />
+			<Skeleton className="size-12 rounded-full" />
+		</>
+	) : (
+		<>
 			{getRoutes(data?.user.mode ?? "").map((route) => {
 				const IconComponent = route.icon;
 				return (
@@ -51,7 +75,7 @@ export function NavBar() {
 						to={route.path}
 						className={cn(
 							"flex flex-col items-center text-sm text-muted-foreground hover:text-foreground",
-							useMatch(route.path) ? "text-primary" : "",
+							isActive(route.path) ? "text-primary" : "",
 						)}
 					>
 						<IconComponent className="size-6" />
@@ -86,6 +110,6 @@ export function NavBar() {
 					<DropdownMenuItem onClick={signOutHandler}>Log out</DropdownMenuItem>
 				</DropdownMenuContent>
 			</DropdownMenu>
-		</footer>
+		</>
 	);
 }

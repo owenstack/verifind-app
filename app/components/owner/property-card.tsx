@@ -102,7 +102,6 @@ export function PropertyCard({ type, data }: PropertyCardProps) {
 				<div
 					className="h-40 w-full bg-cover bg-center bg-no-repeat"
 					style={{ backgroundImage: `url("${imageUrl}")` }}
-					aria-label="Property image"
 				/>
 			</Link>
 

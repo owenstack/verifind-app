@@ -16,7 +16,10 @@ import { Dialog, DialogContent, DialogTitle } from "./ui/dialog";
 export function OnboardingDialog({
 	open,
 	slides,
-}: { open?: boolean; slides: OnboardingContent[] }) {
+}: {
+	open?: boolean;
+	slides: OnboardingContent[];
+}) {
 	const [isOpen, setIsOpen] = useState(open ?? false);
 	const [api, setApi] = useState<CarouselApi>();
 	const [current, setCurrent] = useState(0);

@@ -44,7 +44,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 	}
 	// Load drafts first (local storage)
 	const { drafts } = useDraftList(userId);
-	const stats = {
+	const _stats = {
 		totalViews: 0,
 		totalFavorites: 0,
 		activeListings: 0,
@@ -139,7 +139,7 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 										</Link>
 									</div>
 								) : (
-									items.map((item, index) => (
+									items.map((item, _index) => (
 										<PropertyCard
 											key={
 												item.type === "draft"

@@ -25,3 +25,4 @@
 - **Components**: Default exports, async loaders with typed `Route.LoaderArgs`
 - **Naming**: camelCase variables, PascalCase components, kebab-case files
 - **UI**: Tailwind CSS (use shadcn color variables as defined in the `app.css`), Shadcn UI components (install different shadcn components with `bunx --bun shadcn@latest add`), Lucide icons
+- DO NOT USE `useEffect`

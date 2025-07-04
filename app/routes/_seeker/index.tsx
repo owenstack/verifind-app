@@ -17,7 +17,9 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 				<p className="mt-4">Welcome to the seeker dashboard!</p>
 				{/* Add more content or components as needed */}
 			</div>
-			<OnboardingDialog open={!isOnboarded} slides={seekerOnboardingSlides} />
+			{!isOnboarded && (
+				<OnboardingDialog open={!isOnboarded} slides={seekerOnboardingSlides} />
+			)}
 		</>
 	);
 }

@@ -83,7 +83,10 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 					</div>
 				</div>
 			</div>
-			<OnboardingDialog open={!isOnboarded} slides={ownerOnboardingSlides} />
+			{/* Onboarding dialog */}
+			{!isOnboarded && (
+				<OnboardingDialog open={!isOnboarded} slides={ownerOnboardingSlides} />
+			)}
 		</>
 	);
 }

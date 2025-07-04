@@ -9,9 +9,9 @@ import {
 	Img,
 	Link,
 	Preview,
+	render,
 	Section,
 	Text,
-	render,
 } from "@react-email/components";
 
 interface VerificationCodeEmailProps {

@@ -11,5 +11,5 @@ export const loader = async (args: Route.LoaderArgs) => {
 
 export default function Page({ loaderData }: Route.ComponentProps) {
 	const { res } = loaderData;
-	return <>Edit Page</>;
+	return "Edit Page";
 }

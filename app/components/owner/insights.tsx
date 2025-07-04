@@ -31,12 +31,9 @@ export function ActiveListings({ number }: { number: number }) {
 		<Card>
 			<CardHeader>
 				<CardTitle>Active Listings</CardTitle>
-
 				<CardDescription className="flex items-center justify-between text-2xl font-bold">
 					{formatNumber(number)}
-					<p className="text-sm font-normal text-muted-foreground">
-						active listings
-					</p>
+					<p className="text-sm font-normal text-muted-foreground">listings</p>
 				</CardDescription>
 			</CardHeader>
 		</Card>
@@ -47,7 +44,7 @@ export function BestPerforming({ properties }: { properties?: Property[] }) {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Best Performing</CardTitle>
+				<CardTitle className="sr-only">Best Performing</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<div className="flex flex-col gap-4">
@@ -79,28 +76,28 @@ export function RecentActivity({ activities }: { activities?: any[] }) {
 	return (
 		<Card>
 			<CardHeader>
-				<CardTitle>Recent Activity</CardTitle>
+				<CardTitle className="sr-only">Recent Activity</CardTitle>
 			</CardHeader>
 			<CardContent>
 				<div className="flex flex-col gap-4">
 					{activities?.map((activity) => (
 						<div
-							key={activity.inquiry.id}
+							key={activity.request.id}
 							className="flex items-center justify-between"
 						>
 							<div className="flex flex-col">
 								<p className="text-sm font-medium">
-									New inquiry for{" "}
+									New {activity.request.type} request for
 									<Link to={`/owner/listings/${activity.property.id}`}>
 										{activity.property.title}
 									</Link>
 								</p>
 								<p className="text-xs text-muted-foreground">
-									{activity.inquiry.message}
+									{activity.request.message}
 								</p>
 							</div>
 							<p className="text-sm font-medium">
-								{new Date(activity.inquiry.createdAt).toLocaleDateString()}
+								{new Date(activity.request.createdAt).toLocaleDateString()}
 							</p>
 						</div>
 					))}
@@ -118,9 +115,7 @@ export function OccupancyRate({ rate }: { rate: number }) {
 					<CardTitle>Occupancy rate</CardTitle>
 					<CardDescription className="flex items-center justify-between text-2xl font-semibold">
 						{rate}%
-						<p className="text-sm font-normal text-muted-foreground">
-							occupancy rate
-						</p>
+						<p className="text-sm font-normal text-muted-foreground">rate</p>
 					</CardDescription>
 				</CardHeader>
 			</Card>

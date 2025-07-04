@@ -10,16 +10,16 @@ export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: "sqlite",
 	}),
-	emailAndPassword: {
-		enabled: true,
-		async sendResetPassword({ user, token }) {
-			await client.mailer.resetPasswordMail.mutate({
-				email: user.email,
-				link: token,
-				name: user.name,
-			});
-		},
-	},
+	// emailAndPassword: {
+	// 	enabled: true,
+	// 	async sendResetPassword({ user, token }) {
+	// 		await client.mailer.resetPasswordMail.mutate({
+	// 			email: user.email,
+	// 			link: token,
+	// 			name: user.name,
+	// 		});
+	// 	},
+	// },
 	emailVerification: {
 		async sendVerificationEmail({ user, url, token }) {
 			await client.mailer.verifyEmail.mutate({

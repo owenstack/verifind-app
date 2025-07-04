@@ -15,10 +15,12 @@ export default function Page({ loaderData }: Route.ComponentProps) {
 			<div>
 				<div className="w-full max-w-sm">Welcome to Verifind</div>
 			</div>
-			<OnboardingDialog
-				open={!isOnboarded}
-				slides={serviceProviderOnboardingSlides}
-			/>
+			{!isOnboarded && (
+				<OnboardingDialog
+					open={!isOnboarded}
+					slides={serviceProviderOnboardingSlides}
+				/>
+			)}
 		</>
 	);
 }
